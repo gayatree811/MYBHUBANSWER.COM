@@ -1,12 +1,13 @@
 # API and database conventions
 
-These conventions apply when the backend is built in Phase 4. No API exists in Phase 0.
+The API follows these conventions. Admin routes live under `/api/v1/admin`, and every one checks the session and role on the server.
 
 ## Endpoints
 
 - Base path: `/api/v1`
 - Plural, kebab-case resources: `/api/v1/places`, `/api/v1/bus-routes`
 - Single records by slug on public routes: `/api/v1/places/{slug}`
+- Resources: `places`, `categories`, `events`, `news`, `bus-routes`, `bus-stops`, `people`, `businesses`
 - List filters as query parameters: `?category=temple&page=1&limit=20`
 
 ## Response formats
@@ -77,4 +78,4 @@ Public content records include these fields:
 
 Optional facts that aren't verified are left out and displayed as unavailable, never filled with a guess.
 
-Full schemas for Place, Category, Event, NewsArticle, BusRoute, BusStop, Person, Business and User are defined in Phase 4.
+Schemas for Place, Category, Event, NewsArticle, BusRoute, BusStop, Person, Business and User are in `src/server/schemas.ts`. Bus routes keep their ordered stop names, and each BusStop lists the route numbers that serve it.

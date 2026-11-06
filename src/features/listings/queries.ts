@@ -1,13 +1,4 @@
-import { FOOD_PLACES } from "@/features/listings/food";
-import { PLACES } from "@/features/listings/places";
-import {
-  FOOD_CATEGORIES,
-  PLACE_CATEGORIES,
-  type FoodPlace,
-  type Listing,
-} from "@/features/listings/types";
-
-export const LISTINGS: Listing[] = [...PLACES, ...FOOD_PLACES];
+import type { FoodPlace, Listing } from "@/features/listings/types";
 
 export type SearchParams = Record<string, string | string[] | undefined>;
 
@@ -16,22 +7,16 @@ export function getParam(params: SearchParams, key: string): string | undefined 
   return Array.isArray(value) ? value[0] : value;
 }
 
-export function getListing(slug: string): Listing | undefined {
-  return LISTINGS.find((listing) => listing.slug === slug);
-}
-
 export function getCategoryLabel(listing: Listing): string {
-  return listing.kind === "place"
-    ? PLACE_CATEGORIES[listing.category].label
-    : FOOD_CATEGORIES[listing.category].label;
+  return listing.categoryLabel ?? listing.category;
 }
 
 export function getListingHref(listing: Listing): string {
   return `/${listing.kind === "place" ? "explore" : "food"}/${listing.slug}`;
 }
 
-export function getCuisines(): string[] {
-  return [...new Set(FOOD_PLACES.flatMap((place) => place.cuisines))].sort();
+export function getCuisines(places: FoodPlace[]): string[] {
+  return [...new Set(places.flatMap((place) => place.cuisines))].sort();
 }
 
 type FoodFilters = { category?: string; cuisine?: string; price?: string };
@@ -46,8 +31,8 @@ export function filterFood(places: FoodPlace[], { category, cuisine, price }: Fo
 }
 
 /** Same category first, then the same kind of listing. */
-export function getRelated(listing: Listing, count = 3): Listing[] {
-  const others = LISTINGS.filter(
+export function getRelated(listing: Listing, listings: Listing[], count = 3): Listing[] {
+  const others = listings.filter(
     (other) => other.kind === listing.kind && other.slug !== listing.slug,
   );
   const sameCategory = others.filter((other) => other.category === listing.category);
@@ -94,14 +79,15 @@ export function scoreMatch(words: string[], title: string, text: string): number
   return words.filter((word) => lowerTitle.includes(word)).length;
 }
 
-export function searchListings(query: string): Listing[] {
+export function searchListings(listings: Listing[], query: string): Listing[] {
   const words = getSearchWords(query);
   if (words.length === 0) return [];
 
-  return LISTINGS.map((listing) => ({
-    listing,
-    score: scoreMatch(words, listing.name, getSearchText(listing)),
-  }))
+  return listings
+    .map((listing) => ({
+      listing,
+      score: scoreMatch(words, listing.name, getSearchText(listing)),
+    }))
     .filter((result) => result.score !== null)
     .sort((a, b) => (b.score ?? 0) - (a.score ?? 0))
     .map((result) => result.listing);

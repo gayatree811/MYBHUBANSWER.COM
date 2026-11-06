@@ -19,9 +19,11 @@
     "check": "npm run lint && npm run typecheck && npm run format:check && npm test"
   },
   "dependencies": {
+    "mongodb": "^7.8.0",
     "next": "^16.2.7",
     "react": "^19.2.1",
-    "react-dom": "^19.2.1"
+    "react-dom": "^19.2.1",
+    "zod": "^4.6.7"
   },
   "devDependencies": {
     "@tailwindcss/postcss": "^4",

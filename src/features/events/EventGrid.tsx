@@ -1,7 +1,7 @@
 import { Badge } from "@/components/ui/Badge";
 import { PhotoCard } from "@/components/ui/Card";
 import { formatDateRange } from "@/lib/dates";
-import { EVENT_CATEGORIES, hasStarted, type CityEvent } from "@/features/events/events";
+import { hasStarted, type CityEvent } from "@/features/events/events";
 
 export function EventGrid({ events, now }: { events: CityEvent[]; now: Date }) {
   return (
@@ -17,7 +17,7 @@ export function EventGrid({ events, now }: { events: CityEvent[]; now: Date }) {
           description={`${formatDateRange(event.startsAt, event.endsAt)} · ${event.venue}`}
           badge={
             <Badge tone="glass">
-              {hasStarted(event, now) ? "Happening now" : EVENT_CATEGORIES[event.category]}
+              {hasStarted(event, now) ? "Happening now" : (event.categoryLabel ?? event.category)}
             </Badge>
           }
           sizes="(min-width: 1024px) 33vw, (min-width: 640px) 50vw, 100vw"

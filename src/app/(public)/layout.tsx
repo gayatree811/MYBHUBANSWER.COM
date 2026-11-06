@@ -2,6 +2,9 @@ import type { ReactNode } from "react";
 import { SiteFooter } from "@/components/layout/SiteFooter";
 import { SiteHeader } from "@/components/layout/SiteHeader";
 
+/** Content comes from the database, so pages always render fresh. */
+export const dynamic = "force-dynamic";
+
 export default function PublicLayout({ children }: { children: ReactNode }) {
   return (
     <div className="flex min-h-dvh flex-col">

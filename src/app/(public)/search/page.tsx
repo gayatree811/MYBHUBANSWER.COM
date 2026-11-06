@@ -8,6 +8,7 @@ import { PageHero } from "@/components/layout/PageHero";
 import { getParam, type SearchParams } from "@/features/listings/queries";
 import { SearchForm } from "@/features/search/SearchForm";
 import { searchSite } from "@/features/search/searchSite";
+import { getContent } from "@/server/content";
 
 export const metadata: Metadata = {
   title: "Search",
@@ -34,7 +35,7 @@ export default async function SearchPage({
   searchParams: Promise<SearchParams>;
 }) {
   const query = getParam(await searchParams, "q")?.trim() ?? "";
-  const results = searchSite(query, new Date());
+  const results = searchSite(query, new Date(), await getContent());
 
   return (
     <>

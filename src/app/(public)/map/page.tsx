@@ -2,26 +2,28 @@ import type { Metadata } from "next";
 import { PHOTOS } from "@/lib/photos";
 import { Container, Section } from "@/components/layout/Container";
 import { PageHero } from "@/components/layout/PageHero";
-import { LISTINGS } from "@/features/listings/queries";
-import { PLACE_CATEGORIES } from "@/features/listings/types";
 import { MapExplorer } from "@/features/map/MapExplorer";
 import { toMapListing } from "@/features/map/mapListing";
 import { TRANSPORT_HUBS } from "@/features/transport/hubs";
+import { getCategoryOptions, getContent } from "@/server/content";
 
 export const metadata: Metadata = {
   title: "City map",
   description: "See verified places, temples and food around Bhubaneswar on a map.",
 };
 
-const GROUPS = [
-  ...Object.entries(PLACE_CATEGORIES).map(([value, { label }]) => ({ value, label })),
-  { value: "food", label: "Food" },
-  { value: "transport", label: "Transport" },
-];
-
-export default function MapPage() {
+export default async function MapPage() {
+  const [{ listings: published }, placeGroups] = await Promise.all([
+    getContent(),
+    getCategoryOptions("place"),
+  ]);
+  const groups = [
+    ...placeGroups,
+    { value: "food", label: "Food" },
+    { value: "transport", label: "Transport" },
+  ];
   const listings = [
-    ...LISTINGS.filter((listing) => listing.coordinates).map(toMapListing),
+    ...published.filter((listing) => listing.coordinates).map(toMapListing),
     ...TRANSPORT_HUBS,
   ];
 
@@ -35,7 +37,7 @@ export default function MapPage() {
       />
       <Section className="py-10 md:py-14">
         <Container>
-          <MapExplorer listings={listings} groups={GROUPS} />
+          <MapExplorer listings={listings} groups={groups} />
         </Container>
       </Section>
     </>

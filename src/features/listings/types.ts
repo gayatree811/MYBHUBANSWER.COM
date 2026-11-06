@@ -1,8 +1,5 @@
-import type { IconName } from "@/components/ui/Icon";
 import type { Photo } from "@/lib/photos";
 
-export type PlaceCategory = "temple" | "heritage" | "museum" | "nature" | "sports";
-export type FoodCategory = "restaurant" | "cafe" | "street-food";
 export type PriceBand = "budget" | "mid" | "premium";
 
 export type Source = { name: string; url: string };
@@ -24,13 +21,15 @@ type BaseListing = {
   hours?: VerifiedHours;
   source: Source;
   lastChecked: string;
+  /** Added when loaded, from the Category collection. */
+  categoryLabel?: string;
 };
 
-export type Place = BaseListing & { kind: "place"; category: PlaceCategory };
+export type Place = BaseListing & { kind: "place"; category: string };
 
 export type FoodPlace = BaseListing & {
   kind: "food";
-  category: FoodCategory;
+  category: string;
   cuisines: string[];
   priceBand?: PriceBand;
   priceNote?: string;
@@ -38,20 +37,6 @@ export type FoodPlace = BaseListing & {
 };
 
 export type Listing = Place | FoodPlace;
-
-export const PLACE_CATEGORIES: Record<PlaceCategory, { label: string; icon: IconName }> = {
-  temple: { label: "Temples", icon: "compass" },
-  heritage: { label: "Heritage", icon: "shield" },
-  museum: { label: "Museums", icon: "newspaper" },
-  nature: { label: "Nature", icon: "mapPin" },
-  sports: { label: "Sports", icon: "calendar" },
-};
-
-export const FOOD_CATEGORIES: Record<FoodCategory, { label: string; icon: IconName }> = {
-  restaurant: { label: "Restaurants", icon: "utensils" },
-  cafe: { label: "Cafes", icon: "utensils" },
-  "street-food": { label: "Street food", icon: "utensils" },
-};
 
 export const PRICE_BANDS: Record<PriceBand, string> = {
   budget: "Under ₹500",

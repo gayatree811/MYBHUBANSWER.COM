@@ -2,11 +2,12 @@
 
 A trusted digital guide that brings useful information about Bhubaneswar into one place for residents, tourists, students and local businesses.
 
-**Current stage:** Phase 3, content and transport. Content is stored in code until the Phase 4 database.
+**Current stage:** Phase 4, backend and admin. Public pages show published records from MongoDB.
 
 ## Requirements
 
-- Node.js 20.9 or newer (the current LTS release is recommended)
+- Node.js 20.19 or newer (the current LTS release is recommended)
+- A MongoDB Atlas database
 - npm, which is included with Node.js
 - Git
 
@@ -32,6 +33,8 @@ macOS or Linux:
 cp .env.example .env.local
 ```
 
+Set `MONGODB_URI`, `MONGODB_DB_NAME` and `AUTH_SECRET` in `.env.local`. Generate the secret with `node -e "console.log(require('crypto').randomBytes(32).toString('hex'))"`.
+
 `npm ci` needs the committed `package-lock.json`. The project's `.npmrc` avoids an npm 10.9 install crash, so keep it. The app needs no real secrets during Phase 0.
 
 ## Development
@@ -56,6 +59,16 @@ Open <http://localhost:3000>.
 | `npm run check`        | Run lint, types, formatting and tests   |
 
 The shared components can be reviewed at <http://localhost:3000/design-system>.
+
+## Admin
+
+1. Open <http://localhost:3000/admin> and create the first admin. Setup closes once any user exists.
+2. Choose **Import starter content** on the dashboard. It adds missing records and never overwrites edits.
+3. Add editors under **Users**.
+
+Admins can do everything. Editors can create, edit and publish content, but can't delete records or manage users. In production, set `ADMIN_SETUP_ENABLED=true` only while creating the first admin.
+
+Image uploads need the Cloudinary values in `.env.local`.
 
 ## Git workflow
 

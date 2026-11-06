@@ -49,7 +49,7 @@ Key rules:
 
 ## Folder structure
 
-Folders are created when a phase first needs them. `server` doesn't exist yet.
+Folders are created when a phase first needs them.
 
 ```text
 src/
@@ -74,13 +74,13 @@ A feature's code stays in its folder until two or more features need it. It then
 
 Phase 1 photos are served from Wikimedia Commons and optimized by `next/image`. Phase 4 moves approved images to Cloudinary. Each photo's credit stays in `src/lib/photos.ts`.
 
-## Phase 2 data
+## Content
 
-Listings live in `src/features/listings` until Phase 4 replaces them with the database. Pages use the functions in `queries.ts`, so that change stays small. Filters and search use the URL, so results can be shared.
+Public pages read published records through `src/server/content.ts`. Pure filter and search logic stays in `src/features`. Starter content lives in `src/server/seed`. Filters and search use the URL, so results can be shared.
 
-## Phase 3 data
+## Dated content
 
-News, events and transport data live in `src/features/news`, `src/features/events` and `src/features/transport` until Phase 4. Past events drop out automatically at request time. News pages hold our own short summaries and link to the publisher for the full report.
+Past events drop out automatically at request time. News pages hold our own short summaries and link to the publisher for the full report.
 
 Live service data stays with its official owners. The site links to the Ama app and NTES, and labels its own bus and station details as scheduled reference information.
 

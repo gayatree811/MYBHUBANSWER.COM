@@ -5,26 +5,27 @@ import { EmptyState } from "@/components/ui/States";
 import { Container, Section } from "@/components/layout/Container";
 import { PageHero } from "@/components/layout/PageHero";
 import { FilterGroup } from "@/features/listings/FilterGroup";
-import { FOOD_PLACES } from "@/features/listings/food";
 import { ListingGrid } from "@/features/listings/ListingCard";
 import { filterFood, getCuisines, getParam, type SearchParams } from "@/features/listings/queries";
-import { FOOD_CATEGORIES, PRICE_BANDS } from "@/features/listings/types";
+import { PRICE_BANDS, type FoodPlace } from "@/features/listings/types";
+import { getCategoryOptions, getContent } from "@/server/content";
 
 export const metadata: Metadata = {
   title: "Food and cafes",
   description: "Find Odia food, restaurants and cafes in Bhubaneswar.",
 };
 
-const CATEGORY_OPTIONS = Object.entries(FOOD_CATEGORIES).map(([value, { label }]) => ({
-  value,
-  label,
-}));
 const PRICE_OPTIONS = Object.entries(PRICE_BANDS).map(([value, label]) => ({ value, label }));
-const CUISINE_OPTIONS = getCuisines().map((cuisine) => ({ value: cuisine, label: cuisine }));
 
 export default async function FoodPage({ searchParams }: { searchParams: Promise<SearchParams> }) {
   const params = await searchParams;
-  const places = filterFood(FOOD_PLACES, {
+  const [{ listings }, categoryOptions] = await Promise.all([
+    getContent(),
+    getCategoryOptions("food"),
+  ]);
+  const food = listings.filter((listing): listing is FoodPlace => listing.kind === "food");
+  const cuisineOptions = getCuisines(food).map((cuisine) => ({ value: cuisine, label: cuisine }));
+  const places = filterFood(food, {
     category: getParam(params, "category"),
     cuisine: getParam(params, "cuisine"),
     price: getParam(params, "price"),
@@ -46,14 +47,14 @@ export default async function FoodPage({ searchParams }: { searchParams: Promise
               name="category"
               path="/food"
               params={params}
-              options={CATEGORY_OPTIONS}
+              options={categoryOptions}
             />
             <FilterGroup
               label="Cuisine"
               name="cuisine"
               path="/food"
               params={params}
-              options={CUISINE_OPTIONS}
+              options={cuisineOptions}
             />
             <FilterGroup
               label="Price"
