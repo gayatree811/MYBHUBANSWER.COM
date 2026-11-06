@@ -1,0 +1,223 @@
+import { PHOTOS } from "@/lib/photos";
+import type { Place, Source } from "@/features/listings/types";
+
+const lastChecked = "2026-11-04";
+const kind = "place";
+
+const wikipedia = (page: string): Source => ({
+  name: "Wikipedia",
+  url: `https://en.wikipedia.org/wiki/${page}`,
+});
+
+export const PLACES: Place[] = [
+  {
+    kind,
+    lastChecked,
+    slug: "lingaraja-temple",
+    name: "Lingaraja Temple",
+    category: "temple",
+    summary: "Bhubaneswar's most prominent landmark, dedicated to Shiva.",
+    description:
+      "Lingaraja Temple is a Hindu temple dedicated to Shiva and one of the oldest temples in Bhubaneswar. It is the city's most prominent landmark and one of Odisha's major tourist attractions.",
+    area: "Old Town",
+    coordinates: { lat: 20.23833333, lng: 85.83361111 },
+    photo: PHOTOS.lingaraj,
+    source: wikipedia("Lingaraja_Temple"),
+  },
+  {
+    kind,
+    lastChecked,
+    slug: "mukteshvara-temple",
+    name: "Mukteshvara Temple",
+    category: "temple",
+    summary: "A 10th-century Shiva temple, dated to 950–975 CE.",
+    description:
+      "Mukteshvara Temple is a 10th-century Hindu temple dedicated to Shiva. Dated to 950–975 CE, it is an important monument in the study of how temples developed in Odisha.",
+    area: "Old Town",
+    coordinates: { lat: 20.2427, lng: 85.84039167 },
+    photo: PHOTOS.mukteshvara,
+    source: wikipedia("Mukteshvara_Temple,_Bhubaneswar"),
+  },
+  {
+    kind,
+    lastChecked,
+    slug: "rajarani-temple",
+    name: "Rajarani Temple",
+    category: "temple",
+    summary: "An 11th-century temple named for its yellow and red sandstone.",
+    description:
+      "Rajarani Temple is an 11th-century Hindu temple believed to be devoted to Shiva. It is called Raja Rani because it is made of yellow and red sandstone, colors known locally by that name.",
+    area: "Old Town",
+    coordinates: { lat: 20.24344444, lng: 85.84352222 },
+    photo: PHOTOS.rajarani,
+    source: wikipedia("Rajarani_Temple"),
+  },
+  {
+    kind,
+    lastChecked,
+    slug: "parasurameswara-temple",
+    name: "Parasurameswara Temple",
+    category: "temple",
+    summary: "A well-preserved early Odia temple from the 7th or 8th century.",
+    description:
+      "Parasurameswara Temple is considered the best-preserved example of an early Odia Hindu temple. It is dated to the Shailodbhava period, between the 7th and 8th centuries CE.",
+    area: "Old Town",
+    coordinates: { lat: 20.24313056, lng: 85.83904722 },
+    photo: PHOTOS.parasurameswara,
+    source: wikipedia("Parsurameswara_Temple"),
+  },
+  {
+    kind,
+    lastChecked,
+    slug: "brahmeswara-temple",
+    name: "Brahmeswara Temple",
+    category: "temple",
+    summary: "A richly carved Shiva temple from the late 9th century.",
+    description:
+      "Brahmeswara Temple is a Hindu temple dedicated to Shiva, built at the end of the 9th century CE. It is richly carved inside and out, and inscriptions allow it to be dated with fair accuracy.",
+    area: "Bhubaneswar",
+    coordinates: { lat: 20.239701, lng: 85.851764 },
+    photo: PHOTOS.brahmeswara,
+    source: wikipedia("Brahmeswara_Temple"),
+  },
+  {
+    kind,
+    lastChecked,
+    slug: "ananta-vasudeva-temple",
+    name: "Ananta Vasudeva Temple",
+    category: "temple",
+    summary: "A 13th-century temple dedicated to Krishna.",
+    description:
+      "Ananta Vasudeva Temple is a Hindu temple dedicated to Krishna, an avatar of Vishnu. It was built in the 13th century, and murtis of Krishna, Balarama and Subhadra are worshipped here.",
+    area: "Old Town",
+    coordinates: { lat: 20.24060556, lng: 85.83578056 },
+    photo: PHOTOS.anantaVasudeva,
+    source: wikipedia("Ananta_Vasudeva_Temple"),
+  },
+  {
+    kind,
+    lastChecked,
+    slug: "ram-mandir",
+    name: "Ram Mandir",
+    category: "temple",
+    summary: "A well-known temple near Kharavel Nagar on Janpath.",
+    description:
+      "Ram Mandir is a Hindu temple near Kharavel Nagar on Janpath. It houses images of Rama, Sita and Lakshmana.",
+    area: "Kharavel Nagar, Janpath",
+    coordinates: { lat: 20.27765, lng: 85.8429 },
+    photo: PHOTOS.ramMandir,
+    source: wikipedia("Ram_Mandir,_Bhubaneswar"),
+  },
+  {
+    kind,
+    lastChecked,
+    slug: "udayagiri-khandagiri-caves",
+    name: "Udayagiri and Khandagiri Caves",
+    category: "heritage",
+    summary: "Partly natural, partly artificial caves on two adjacent hills.",
+    description:
+      "These partly natural and partly artificial caves sit on two adjacent hills, Udayagiri and Khandagiri. They are of archaeological, historical and religious importance.",
+    area: "Khandagiri",
+    coordinates: { lat: 20.2628312, lng: 85.7860297 },
+    photo: PHOTOS.udayagiri,
+    hours: {
+      text: "9:00 am to 9:00 pm",
+      source: {
+        name: "Incredible India",
+        url: "https://incredibleindia.gov.in/en/odisha/bhubaneswar/khandagiri-and-udayagiri-caves",
+      },
+    },
+    source: wikipedia("Udayagiri_and_Khandagiri_caves"),
+  },
+  {
+    kind,
+    lastChecked,
+    slug: "dhauli",
+    name: "Dhauli",
+    category: "heritage",
+    summary: "A hill on the banks of the river Daya, south of the city.",
+    description:
+      "Dhauli, also called Dhauligiri, is a hill on the banks of the river Daya, about 8 km south of Bhubaneswar.",
+    area: "Dhauli",
+    coordinates: { lat: 20.19237222, lng: 85.83948889 },
+    photo: PHOTOS.shantiStupa,
+    source: wikipedia("Dhauli"),
+  },
+  {
+    kind,
+    lastChecked,
+    slug: "odisha-state-museum",
+    name: "Odisha State Museum",
+    category: "museum",
+    summary: "Eleven sections, from archaeology to patta painting.",
+    description:
+      "Established in its original form in 1932, the museum moved to its current building in 1960. Its sections include archaeology, epigraphy, numismatics, armoury, art and craft, and patta painting.",
+    area: "Bhubaneswar",
+    coordinates: { lat: 20.2562, lng: 85.8415 },
+    photo: PHOTOS.stateMuseum,
+    source: wikipedia("Odisha_State_Museum"),
+  },
+  {
+    kind,
+    lastChecked,
+    slug: "regional-museum-of-natural-history",
+    name: "Regional Museum of Natural History",
+    category: "museum",
+    summary: "Exhibits on the plants, animals and geology of eastern India.",
+    description:
+      "Inaugurated in 2004, this museum has exhibits on the plants, animals and geology of the eastern region of India.",
+    area: "Bhubaneswar",
+    coordinates: { lat: 20.299611, lng: 85.832063 },
+    photo: PHOTOS.naturalHistoryMuseum,
+    source: wikipedia("Regional_Museum_of_Natural_History,_Bhubaneswar"),
+  },
+  {
+    kind,
+    lastChecked,
+    slug: "pathani-samanta-planetarium",
+    name: "Pathani Samanta Planetarium",
+    category: "museum",
+    summary: "An astronomy center named after astronomer Pathani Samanta.",
+    description:
+      "Founded to raise awareness of astronomy, the planetarium runs night-sky viewing, audio-visual programs and poster shows.",
+    area: "Bhubaneswar",
+    coordinates: { lat: 20.2981, lng: 85.8323 },
+    photo: PHOTOS.planetarium,
+    source: wikipedia("Pathani_Samanta_Planetarium"),
+  },
+  {
+    kind,
+    lastChecked,
+    slug: "nandankanan-zoological-park",
+    name: "Nandankanan Zoological Park",
+    category: "nature",
+    summary: "A 437-hectare zoo and botanical garden north of the city.",
+    description:
+      "Nandankanan is a 437-hectare zoo and botanical garden in Barang. It was established in 1960 and opened to the public in 1979.",
+    area: "Barang",
+    coordinates: { lat: 20.399965, lng: 85.814703 },
+    photo: PHOTOS.nandankanan,
+    hours: {
+      text: "8:00 am to 5:00 pm, closed Mondays. Published for 1 Oct 2025 to 31 Mar 2026, so confirm before visiting.",
+      source: {
+        name: "Hindusthan Samachar",
+        url: "https://english.hindusthansamachar.in//Encyc/2025/10/1/New-Timings-Announced-for-Nandankanan.php",
+      },
+    },
+    source: wikipedia("Nandankanan_Zoological_Park"),
+  },
+  {
+    kind,
+    lastChecked,
+    slug: "kalinga-stadium",
+    name: "Kalinga Stadium",
+    category: "sports",
+    summary: "A multi-purpose international sports complex.",
+    description:
+      "Kalinga Stadium is a multi-purpose international sports complex. Its foundation stone was laid in 1978, and it is best known as the home ground of Odisha FC.",
+    area: "Bhubaneswar",
+    coordinates: { lat: 20.28806274, lng: 85.82381948 },
+    photo: PHOTOS.kalingaStadium,
+    source: wikipedia("Kalinga_Stadium"),
+  },
+];

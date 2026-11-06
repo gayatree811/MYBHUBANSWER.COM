@@ -1,0 +1,43 @@
+{
+  "name": "mybhubaneswar",
+  "version": "0.1.0",
+  "private": true,
+  "description": "A trusted digital guide to Bhubaneswar.",
+  "engines": {
+    "node": ">=20.9.0"
+  },
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "eslint",
+    "typecheck": "next typegen && tsc --noEmit",
+    "format": "prettier --write .",
+    "format:check": "prettier --check .",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "check": "npm run lint && npm run typecheck && npm run format:check && npm test"
+  },
+  "dependencies": {
+    "next": "^16.2.7",
+    "react": "^19.2.1",
+    "react-dom": "^19.2.1"
+  },
+  "devDependencies": {
+    "@tailwindcss/postcss": "^4",
+    "@testing-library/dom": "^10",
+    "@testing-library/react": "^16",
+    "@types/leaflet": "^1.9",
+    "@types/node": "^22",
+    "@types/react": "^19",
+    "@types/react-dom": "^19",
+    "@vitejs/plugin-react": "^5",
+    "eslint": "^9",
+    "eslint-config-next": "^16.2.7",
+    "jsdom": "^27",
+    "prettier": "^3",
+    "tailwindcss": "^4",
+    "typescript": "^5",
+    "vitest": "^4"
+  }
+}
