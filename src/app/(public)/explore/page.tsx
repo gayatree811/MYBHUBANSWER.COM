@@ -6,16 +6,13 @@ import { Container, Section } from "@/components/layout/Container";
 import { PageHero } from "@/components/layout/PageHero";
 import { FilterGroup } from "@/features/listings/FilterGroup";
 import { ListingGrid } from "@/features/listings/ListingCard";
-import { PLACES } from "@/features/listings/places";
 import { getParam, type SearchParams } from "@/features/listings/queries";
-import { PLACE_CATEGORIES } from "@/features/listings/types";
+import { getCategoryOptions, getContent } from "@/server/content";
 
 export const metadata: Metadata = {
   title: "Explore places and heritage",
   description: "Discover temples, heritage sites, museums and more in Bhubaneswar.",
 };
-
-const OPTIONS = Object.entries(PLACE_CATEGORIES).map(([value, { label }]) => ({ value, label }));
 
 export default async function ExplorePage({
   searchParams,
@@ -24,7 +21,10 @@ export default async function ExplorePage({
 }) {
   const params = await searchParams;
   const category = getParam(params, "category");
-  const places = category ? PLACES.filter((place) => place.category === category) : PLACES;
+  const [{ listings }, options] = await Promise.all([getContent(), getCategoryOptions("place")]);
+  const places = listings.filter(
+    (listing) => listing.kind === "place" && (!category || listing.category === category),
+  );
 
   return (
     <>
@@ -41,7 +41,7 @@ export default async function ExplorePage({
             name="category"
             path="/explore"
             params={params}
-            options={OPTIONS}
+            options={options}
           />
           <p aria-live="polite" className="mt-6 mb-5 text-sm text-muted">
             {places.length} {places.length === 1 ? "place" : "places"}

@@ -1,7 +1,7 @@
 import { Badge } from "@/components/ui/Badge";
 import { PhotoCard } from "@/components/ui/Card";
 import { formatShortDate } from "@/lib/dates";
-import { NEWS_TOPICS, type NewsArticle } from "@/features/news/articles";
+import type { NewsArticle } from "@/features/news/articles";
 
 export function NewsGrid({ articles }: { articles: NewsArticle[] }) {
   return (
@@ -15,7 +15,7 @@ export function NewsGrid({ articles }: { articles: NewsArticle[] }) {
           title={article.title}
           titleSize="small"
           description={`${formatShortDate(article.publishedAt)} · ${article.source.name}`}
-          badge={<Badge tone="glass">{NEWS_TOPICS[article.topic]}</Badge>}
+          badge={<Badge tone="glass">{article.topicLabel ?? article.topic}</Badge>}
           sizes="(min-width: 1024px) 33vw, (min-width: 640px) 50vw, 100vw"
           className="reveal"
         />

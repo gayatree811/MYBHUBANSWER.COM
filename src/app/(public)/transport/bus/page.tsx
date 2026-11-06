@@ -11,8 +11,8 @@ import { PageHero } from "@/components/layout/PageHero";
 import { FilterGroup } from "@/features/listings/FilterGroup";
 import { getParam, type SearchParams } from "@/features/listings/queries";
 import { SearchForm } from "@/features/search/SearchForm";
-import { ROUTE_DIRECTORY_SOURCE } from "@/features/transport/busRoutes";
 import { BUS_HUBS, findBusRoutes } from "@/features/transport/queries";
+import { getContent } from "@/server/content";
 
 export const metadata: Metadata = {
   title: "Ama Bus routes",
@@ -26,7 +26,9 @@ export default async function BusRoutesPage({
 }) {
   const params = await searchParams;
   const query = getParam(params, "q")?.trim() ?? "";
-  const routes = findBusRoutes(query, getParam(params, "hub"));
+  const { busRoutes } = await getContent();
+  const routes = findBusRoutes(busRoutes, query, getParam(params, "hub"));
+  const directorySource = busRoutes[0]?.directorySource;
 
   return (
     <>
@@ -69,16 +71,22 @@ export default async function BusRoutesPage({
             />
           </div>
           <p aria-live="polite" className="mt-6 mb-5 text-sm text-muted">
-            {routes.length} {routes.length === 1 ? "route" : "routes"}. Directory from{" "}
-            <a
-              href={ROUTE_DIRECTORY_SOURCE.url}
-              target="_blank"
-              rel="noreferrer"
-              className="underline underline-offset-4"
-            >
-              {ROUTE_DIRECTORY_SOURCE.name}
-            </a>
-            , last checked 6 November 2026.
+            {routes.length} {routes.length === 1 ? "route" : "routes"}.
+            {directorySource && (
+              <>
+                {" "}
+                Directory from{" "}
+                <a
+                  href={directorySource.url}
+                  target="_blank"
+                  rel="noreferrer"
+                  className="underline underline-offset-4"
+                >
+                  {directorySource.name}
+                </a>
+                .
+              </>
+            )}
           </p>
           {routes.length > 0 ? (
             <ul className="grid gap-3 md:grid-cols-2 lg:grid-cols-3">

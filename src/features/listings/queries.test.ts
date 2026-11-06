@@ -1,14 +1,16 @@
 import { describe, expect, it } from "vitest";
-import { FOOD_PLACES } from "@/features/listings/food";
 import {
   buildFilterHref,
   filterFood,
   getDirectionsUrl,
-  getListing,
   getRelated,
-  LISTINGS,
   searchListings,
 } from "@/features/listings/queries";
+import { FOOD_PLACES } from "@/server/seed/food";
+import { PLACES } from "@/server/seed/places";
+
+const LISTINGS = [...PLACES, ...FOOD_PLACES];
+const getListing = (slug: string) => LISTINGS.find((listing) => listing.slug === slug);
 
 describe("listings data", () => {
   it("has unique slugs", () => {
@@ -45,19 +47,21 @@ describe("filterFood", () => {
 
 describe("searchListings", () => {
   it("finds places by name, regardless of case", () => {
-    expect(searchListings("LINGARAJA")[0].slug).toBe("lingaraja-temple");
+    expect(searchListings(LISTINGS, "LINGARAJA")[0].slug).toBe("lingaraja-temple");
   });
 
   it("finds food by cuisine", () => {
-    expect(searchListings("korean").map((listing) => listing.slug)).toContain("arinova-cafe");
+    expect(searchListings(LISTINGS, "korean").map((listing) => listing.slug)).toContain(
+      "arinova-cafe",
+    );
   });
 
   it("requires every word to match", () => {
-    expect(searchListings("temple zzzz")).toEqual([]);
+    expect(searchListings(LISTINGS, "temple zzzz")).toEqual([]);
   });
 
   it("returns nothing for an empty search", () => {
-    expect(searchListings("   ")).toEqual([]);
+    expect(searchListings(LISTINGS, "   ")).toEqual([]);
   });
 });
 
@@ -76,7 +80,7 @@ describe("buildFilterHref", () => {
 describe("listing helpers", () => {
   it("does not relate a listing to itself", () => {
     const listing = getListing("dalma")!;
-    expect(getRelated(listing).map((item) => item.slug)).not.toContain("dalma");
+    expect(getRelated(listing, LISTINGS).map((item) => item.slug)).not.toContain("dalma");
   });
 
   it("builds directions without coordinates", () => {

@@ -6,33 +6,38 @@ import { Notice } from "@/components/ui/Notice";
 import { SectionHeader } from "@/components/ui/SectionHeader";
 import { Container, Section } from "@/components/layout/Container";
 import { PageHero } from "@/components/layout/PageHero";
-import { ARTICLES, getArticle, getArticles, NEWS_TOPICS } from "@/features/news/articles";
+import { sortArticles } from "@/features/news/articles";
 import { NewsGrid } from "@/features/news/NewsGrid";
-
-export const dynamicParams = false;
+import { getContent } from "@/server/content";
 
 type PageProps = { params: Promise<{ slug: string }> };
 
-export function generateStaticParams() {
-  return ARTICLES.map(({ slug }) => ({ slug }));
+async function find(slug: string) {
+  const { articles } = await getContent();
+  return articles.find((article) => article.slug === slug);
 }
 
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
-  const article = getArticle((await params).slug);
+  const article = await find((await params).slug);
   return article ? { title: article.title, description: article.summary } : {};
 }
 
 export default async function ArticlePage({ params }: PageProps) {
-  const article = getArticle((await params).slug);
+  const article = await find((await params).slug);
   if (!article) notFound();
 
-  const related = getArticles(article.topic)
+  const { articles } = await getContent();
+  const related = sortArticles(articles, article.topic)
     .filter(({ slug }) => slug !== article.slug)
     .slice(0, 3);
 
   return (
     <>
-      <PageHero eyebrow={NEWS_TOPICS[article.topic]} title={article.title} photo={article.photo} />
+      <PageHero
+        eyebrow={article.topicLabel ?? article.topic}
+        title={article.title}
+        photo={article.photo}
+      />
       <Section className="py-12 md:py-16">
         <Container narrow>
           <p className="text-sm font-semibold text-muted">

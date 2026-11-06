@@ -24,3 +24,7 @@ test-results/
 Thumbs.db
 desktop.ini
 .vercel
+.env.local
+.env
+.env.*
+!.env.example
