@@ -6,12 +6,12 @@ import { SectionHeader } from "@/components/ui/SectionHeader";
 import { Container, Section } from "@/components/layout/Container";
 import { PageHero } from "@/components/layout/PageHero";
 import { ListingGrid } from "@/features/listings/ListingCard";
-import { getCategoryLabel, getDirectionsUrl, getRelated } from "@/features/listings/queries";
+import { getCategoryLabel, getDirectionsUrl } from "@/features/listings/queries";
 import { PRICE_BANDS, type Listing } from "@/features/listings/types";
 import { MapPreview } from "@/features/map/MapPreview";
 import { toMapListing } from "@/features/map/mapListing";
 
-export function ListingDetail({ listing }: { listing: Listing }) {
+export function ListingDetail({ listing, related }: { listing: Listing; related: Listing[] }) {
   const food = listing.kind === "food" ? listing : null;
 
   return (
@@ -120,7 +120,7 @@ export function ListingDetail({ listing }: { listing: Listing }) {
       <Section className="bg-sand-100">
         <Container>
           <SectionHeader eyebrow="Keep going" title="You may also like" />
-          <ListingGrid listings={getRelated(listing)} />
+          <ListingGrid listings={related} />
         </Container>
       </Section>
     </>

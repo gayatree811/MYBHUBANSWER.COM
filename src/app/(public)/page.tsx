@@ -9,8 +9,8 @@ import { Icon, type IconName } from "@/components/ui/Icon";
 import { SectionHeader } from "@/components/ui/SectionHeader";
 import { Container, Section } from "@/components/layout/Container";
 import { ListingCard } from "@/features/listings/ListingCard";
-import { getListing } from "@/features/listings/queries";
 import { SearchForm } from "@/features/search/SearchForm";
+import { getContent } from "@/server/content";
 
 const PROMISES: { icon: IconName; title: string; description: string }[] = [
   {
@@ -35,7 +35,12 @@ const FEATURED = ["lingaraja-temple", "udayagiri-khandagiri-caves", "dalma"];
 /** The first card spans two columns to give the grid a clear focal point. */
 const CARD_LAYOUT = ["lg:col-span-2 lg:min-h-96", "lg:min-h-96"];
 
-export default function HomePage() {
+export default async function HomePage() {
+  const { listings } = await getContent();
+  const featured = FEATURED.flatMap(
+    (slug) => listings.find((listing) => listing.slug === slug) ?? [],
+  );
+
   return (
     <>
       <div className="relative isolate flex min-h-svh items-end overflow-hidden bg-ink-950 pt-32 pb-14 text-white md:pb-20">
@@ -98,10 +103,9 @@ export default function HomePage() {
         <Container>
           <SectionHeader eyebrow="Start here" title="Places to begin with" />
           <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
-            {FEATURED.map((slug) => {
-              const listing = getListing(slug);
-              return listing && <ListingCard key={slug} listing={listing} />;
-            })}
+            {featured.map((listing) => (
+              <ListingCard key={listing.slug} listing={listing} />
+            ))}
           </div>
         </Container>
       </Section>

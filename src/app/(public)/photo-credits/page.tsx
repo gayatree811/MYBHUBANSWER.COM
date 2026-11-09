@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import Image from "next/image";
-import { PHOTOS } from "@/lib/photos";
+import { getCreditedPhotos } from "@/server/content";
 import { Card } from "@/components/ui/Card";
 import { Container, Section } from "@/components/layout/Container";
 import { PageHero } from "@/components/layout/PageHero";
@@ -9,7 +9,9 @@ export const metadata: Metadata = { title: "Photo credits" };
 
 const linkClass = "font-semibold text-brand underline-offset-4 hover:underline";
 
-export default function PhotoCreditsPage() {
+export default async function PhotoCreditsPage() {
+  const photos = await getCreditedPhotos();
+
   return (
     <>
       <PageHero
@@ -19,7 +21,7 @@ export default function PhotoCreditsPage() {
       <Section>
         <Container>
           <ul className="grid gap-5 md:grid-cols-2">
-            {Object.values(PHOTOS).map((photo) => (
+            {photos.map((photo) => (
               <li key={photo.sourceUrl}>
                 <Card className="flex h-full gap-4 p-4">
                   <div className="relative size-24 shrink-0 overflow-hidden rounded-control bg-sand-100">

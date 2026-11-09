@@ -1,26 +1,25 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
-import { FOOD_PLACES } from "@/features/listings/food";
 import { ListingDetail } from "@/features/listings/ListingDetail";
-
-export const dynamicParams = false;
+import { getRelated } from "@/features/listings/queries";
+import { getContent } from "@/server/content";
 
 type PageProps = { params: Promise<{ slug: string }> };
 
-const find = (slug: string) => FOOD_PLACES.find((listing) => listing.slug === slug);
-
-export function generateStaticParams() {
-  return FOOD_PLACES.map(({ slug }) => ({ slug }));
+async function find(slug: string) {
+  const { listings } = await getContent();
+  return listings.find((listing) => listing.kind === "food" && listing.slug === slug);
 }
 
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
-  const listing = find((await params).slug);
+  const listing = await find((await params).slug);
   return listing ? { title: listing.name, description: listing.summary } : {};
 }
 
 export default async function ListingPage({ params }: PageProps) {
-  const listing = find((await params).slug);
+  const listing = await find((await params).slug);
   if (!listing) notFound();
 
-  return <ListingDetail listing={listing} />;
+  const { listings } = await getContent();
+  return <ListingDetail listing={listing} related={getRelated(listing, listings)} />;
 }

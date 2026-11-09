@@ -1,6 +1,5 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
-import { connection } from "next/server";
 import { formatDate, formatDateRange, formatTimeRange } from "@/lib/dates";
 import { Badge } from "@/components/ui/Badge";
 import { Button } from "@/components/ui/Button";
@@ -8,33 +7,31 @@ import { Card } from "@/components/ui/Card";
 import { Fact, factLinkClass } from "@/components/ui/Fact";
 import { Container, Section } from "@/components/layout/Container";
 import { PageHero } from "@/components/layout/PageHero";
-import { EVENT_CATEGORIES, EVENTS, getEvent, hasEnded } from "@/features/events/events";
-
-export const dynamicParams = false;
+import { hasEnded } from "@/features/events/events";
+import { getContent } from "@/server/content";
 
 type PageProps = { params: Promise<{ slug: string }> };
 
-export function generateStaticParams() {
-  return EVENTS.map(({ slug }) => ({ slug }));
+async function find(slug: string) {
+  const { events } = await getContent();
+  return events.find((event) => event.slug === slug);
 }
 
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
-  const event = getEvent((await params).slug);
+  const event = await find((await params).slug);
   return event ? { title: event.name, description: event.summary } : {};
 }
 
 export default async function EventPage({ params }: PageProps) {
-  const event = getEvent((await params).slug);
+  const event = await find((await params).slug);
   if (!event) notFound();
 
-  // Renders on each request, so an event is never shown as upcoming after it ends.
-  await connection();
   const ended = hasEnded(event, new Date());
 
   return (
     <>
       <PageHero
-        eyebrow={EVENT_CATEGORIES[event.category]}
+        eyebrow={event.categoryLabel ?? event.category}
         title={event.name}
         description={event.summary}
         photo={event.photo}

@@ -7,24 +7,22 @@ import { Notice } from "@/components/ui/Notice";
 import { EmptyState } from "@/components/ui/States";
 import { Container, Section } from "@/components/layout/Container";
 import { PageHero } from "@/components/layout/PageHero";
-import { BUS_ROUTES } from "@/features/transport/busRoutes";
-import { getBusRoute } from "@/features/transport/queries";
-
-export const dynamicParams = false;
+import { getContent } from "@/server/content";
 
 type PageProps = { params: Promise<{ route: string }> };
 
-export function generateStaticParams() {
-  return BUS_ROUTES.map(({ slug }) => ({ route: slug }));
+async function find(slug: string) {
+  const { busRoutes } = await getContent();
+  return busRoutes.find((route) => route.slug === slug);
 }
 
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
-  const route = getBusRoute((await params).route);
+  const route = await find((await params).route);
   return route ? { title: `Ama Bus route ${route.number}` } : {};
 }
 
 export default async function BusRoutePage({ params }: PageProps) {
-  const route = getBusRoute((await params).route);
+  const route = await find((await params).route);
   if (!route) notFound();
 
   const { details } = route;

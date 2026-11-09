@@ -5,16 +5,15 @@ import { EmptyState } from "@/components/ui/States";
 import { Container, Section } from "@/components/layout/Container";
 import { PageHero } from "@/components/layout/PageHero";
 import { EventGrid } from "@/features/events/EventGrid";
-import { EVENT_CATEGORIES, getUpcomingEvents } from "@/features/events/events";
+import { getUpcomingEvents } from "@/features/events/events";
 import { FilterGroup } from "@/features/listings/FilterGroup";
 import { getParam, type SearchParams } from "@/features/listings/queries";
+import { getCategoryOptions, getContent } from "@/server/content";
 
 export const metadata: Metadata = {
   title: "Events",
   description: "Upcoming events and activities in Bhubaneswar.",
 };
-
-const OPTIONS = Object.entries(EVENT_CATEGORIES).map(([value, label]) => ({ value, label }));
 
 export default async function EventsPage({
   searchParams,
@@ -23,7 +22,8 @@ export default async function EventsPage({
 }) {
   const params = await searchParams;
   const now = new Date();
-  const events = getUpcomingEvents(now, getParam(params, "category"));
+  const [content, options] = await Promise.all([getContent(), getCategoryOptions("event")]);
+  const events = getUpcomingEvents(content.events, now, getParam(params, "category"));
 
   return (
     <>
@@ -40,7 +40,7 @@ export default async function EventsPage({
             name="category"
             path="/events"
             params={params}
-            options={OPTIONS}
+            options={options}
           />
           <p aria-live="polite" className="mt-6 mb-5 text-sm text-muted">
             {events.length} upcoming {events.length === 1 ? "event" : "events"}, soonest first.
